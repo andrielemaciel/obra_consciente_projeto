@@ -1,134 +1,118 @@
 # Obra Consciente
 
-Sistema web para controle de materiais e redução de desperdícios na construção civil. Projeto acadêmico desenvolvido com HTML, CSS, JavaScript, Node.js, Express, MySQL, API REST, CRUD e autenticação JWT.
+Sistema web desenvolvido para ajudar no controle de materiais e na redução de desperdícios na construção civil.
 
-## Problema, público e solução
+## 1. Problema, público e solução
 
-Em obras, materiais podem ser desperdiçados por falta de controle do estoque, compras excessivas ou dificuldade para acompanhar o consumo. Isso pode aumentar os custos e atrasar a construção. O sistema é destinado a construtoras, engenheiros, mestres de obras, responsáveis pelo estoque e equipes que acompanham materiais. A proposta é cadastrar materiais, registrar entradas e saídas, consultar o estoque e identificar itens abaixo do nível mínimo.
+Em muitas obras, materiais podem ser desperdiçados por falta de controle do estoque, compras excessivas ou dificuldade para acompanhar o consumo. Isso pode aumentar os custos e causar atrasos na construção.
 
-## Funcionalidades
+O sistema Obra Consciente foi pensado para construtoras, engenheiros, mestres de obras, responsáveis pelo estoque e equipes que precisam acompanhar os materiais utilizados nas construções.
 
-- Cadastro de usuários e login com senha protegida por hash.
-- Autenticação JWT com validade de 8 horas.
-- Perfis `admin`, `estoquista` e `consulta`, com autorização conferida pela API.
-- CRUD de materiais: cadastrar, consultar, editar e excluir (exclusão só para admin e sem histórico de movimentação).
-- Registro de entradas e saídas com atualização transacional do estoque.
-- Bloqueio de saída acima do estoque disponível.
-- Indicador de estoque baixo e histórico das movimentações.
-- Interface HTML/CSS/JavaScript que consome a API usando Fetch.
+A proposta é desenvolver um sistema web que permita cadastrar materiais, registrar entradas e saídas, consultar as quantidades disponíveis e identificar materiais que estejam abaixo do estoque mínimo. Assim, será possível melhorar a organização dos materiais e evitar desperdícios.
 
-## Perfis de usuário
+## 2. Principais funcionalidades
 
-- **Administrador (`admin`):** consulta, cadastra e edita materiais, exclui materiais sem movimentação e registra entradas/saídas.
-- **Responsável pelo estoque (`estoquista`):** consulta, cadastra e edita materiais e registra entradas/saídas.
-- **Consulta (`consulta`):** visualiza materiais e histórico, sem alterar os dados.
+- Cadastro e login de usuários.
+- Controle de acesso conforme o perfil do usuário.
+- Cadastro de materiais.
+- Consulta dos materiais disponíveis.
+- Edição e exclusão de materiais.
+- Registro de entradas e saídas de materiais.
+- Atualização automática das quantidades em estoque.
+- Avisos quando os materiais estiverem abaixo do estoque mínimo.
+- Histórico de movimentações.
 
-Por segurança, todo cadastro feito pela tela recebe inicialmente o perfil `consulta`. Quem administra o computador e o banco pode promover uma conta para `estoquista` pelo comando local abaixo. Esse perfil permite cadastrar/editar materiais e registrar movimentações, sem a permissão de exclusão reservada ao administrador.
+## 3. Tipos de usuários e suas permissões
 
-## Tecnologias
+O sistema terá três tipos de usuários:
 
-HTML5, CSS3, JavaScript (Fetch e DOM), Node.js, Express, MySQL, mysql2, bcryptjs, jsonwebtoken, dotenv e cors.
+**Administrador (admin):**
+- Visualizar os materiais.
+- Cadastrar e editar materiais.
+- Excluir materiais sem movimentações registradas.
+- Registrar entradas e saídas.
+- Consultar o histórico de movimentações.
 
-## Estrutura
+**Responsável pelo estoque (estoquista):**
+- Visualizar os materiais.
+- Cadastrar e editar materiais.
+- Registrar entradas e saídas.
+- Consultar o histórico de movimentações.
+
+**Usuário de consulta (consulta):**
+- Visualizar os materiais cadastrados.
+- Consultar o histórico de movimentações.
+- Não pode alterar informações ou registrar movimentações.
+
+## 4. Fluxo básico de funcionamento
+
+1. O usuário acessa o sistema Obra Consciente.
+2. Realiza o cadastro ou faz login com seu e-mail e senha.
+3. O sistema verifica os dados e identifica o perfil de acesso do usuário.
+4. Após entrar, o usuário pode visualizar os materiais cadastrados no estoque.
+5. O administrador e o responsável pelo estoque podem cadastrar materiais, editar informações e registrar entradas e saídas.
+6. A cada movimentação, o sistema atualiza automaticamente a quantidade disponível.
+7. Quando um material atinge ou fica abaixo do estoque mínimo, o sistema apresenta um alerta.
+8. Os usuários também podem consultar o histórico de movimentações para acompanhar o controle dos materiais.
+
+## 5. Tecnologias utilizadas
+
+- HTML5
+- CSS3
+- JavaScript
+- Node.js
+- Express
+- MySQL
+- API REST
+- JWT para autenticação
+- Fetch para comunicação entre o front-end e o back-end.
+
+## 6. Estrutura do projeto
 
 ```text
 obra-consciente/
 ├── backend/
-│   ├── controllers/       # Regras de autenticação, materiais e movimentações
-│   ├── database/          # Pool de conexão MySQL
-│   ├── middlewares/       # Autenticação JWT e autorização por perfil
-│   ├── routes/            # Rotas da API REST
+│   ├── controllers/
+│   ├── database/
+│   ├── middlewares/
+│   ├── routes/
 │   ├── .env.example
 │   ├── package.json
 │   └── server.js
 ├── frontend/
-│   ├── css/style.css
-│   ├── js/app.js
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── app.js
 │   └── index.html
-├── sql/obra_consciente.sql
+├── sql/
+│   ├── obra_consciente.sql
+│   └── migrar_schema_atual.sql
 ├── .gitignore
 └── README.md
 ```
 
-## Como instalar e executar
+## 7. Banco de dados
 
-1. Instale Node.js (versão LTS) e MySQL.
-2. Abra o MySQL e configure o banco:
-   - Para uma instalação nova, execute `sql/obra_consciente.sql`.
-   - Se já criou o banco com a versão anterior do projeto, faça um backup e execute `sql/migrar_schema_atual.sql` uma única vez para adaptar as tabelas sem apagar os registros existentes. Essa migração remove e recria as validações de quantidade porque o MySQL não permite renomear colunas usadas por essas validações.
-3. No terminal, entre na pasta `backend` e instale as dependências:
+O sistema utilizará o MySQL para armazenar as informações.
 
-   ```bash
-   npm install
-   ```
+As principais tabelas previstas são:
 
-4. Copie `backend/.env.example` para `backend/.env`, configure usuário/senha do MySQL e substitua `JWT_SECRET` por uma chave aleatória longa. Para gerar uma chave localmente, use `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` e copie o resultado para o `.env`. Não envie `.env` ao GitHub.
-5. Inicie a API dentro da pasta `backend`:
+- **usuarios:** armazena os dados dos usuários e seus níveis de acesso.
+- **materiais:** armazena os dados dos materiais, suas quantidades e o estoque mínimo.
+- **movimentacoes:** registra as entradas e saídas de materiais, incluindo a quantidade, a data e o usuário responsável.
 
-   ```bash
-   npm run dev
-   ```
+As tabelas serão relacionadas por meio de chaves primárias e estrangeiras.
 
-6. Abra `frontend/index.html` no navegador. A API fica em `http://localhost:3000`.
-7. Crie uma conta na tela. Para habilitar cadastro de materiais e movimentações para ela, abra outro terminal na pasta `backend` e execute, trocando o e-mail pelo da conta:
+## 8. Organização do desenvolvimento
 
-   ```bash
-   npm run promover-estoquista -- seu-email@exemplo.com
-   ```
+O projeto será desenvolvido em etapas, utilizando o mesmo repositório no GitHub durante todo o processo.
 
-   Saia da conta no site e entre novamente para receber um token com o novo perfil. Novas contas continuam começando como `consulta`. O comando é local e não existe uma opção pública no site para elevar privilégios.
+- **Entrega 1:** definição do problema, proposta de solução e estrutura inicial do projeto.
+- **Entrega 2:** desenvolvimento do banco de dados, cadastro, login e autenticação com JWT.
+- **Entrega 3:** implementação do CRUD, integração entre front-end, API e banco de dados.
+- **Entrega 4:** finalização do sistema, testes, documentação e apresentação.
 
-## Rotas principais da API
+## 9. GitHub
 
-Todas as respostas são JSON. Para rotas protegidas, envie `Authorization: Bearer SEU_TOKEN`.
-
-| Método | Rota | Acesso | Função |
-|---|---|---|---|
-| GET | `/` | Público | Verificar se a API iniciou |
-| GET | `/api/saude` | Público | Verificar conexão com MySQL |
-| POST | `/api/auth/cadastro` | Público | Cadastrar conta com perfil consulta |
-| POST | `/api/auth/login` | Público | Entrar e receber JWT |
-| GET | `/api/perfil` | Autenticado | Consultar dados do token |
-| GET | `/api/materiais` | Autenticado | Listar materiais |
-| POST | `/api/materiais` | Admin/estoquista | Cadastrar material |
-| PUT | `/api/materiais/:id` | Admin/estoquista | Editar material |
-| DELETE | `/api/materiais/:id` | Admin | Excluir material sem movimentações |
-| GET | `/api/movimentacoes` | Autenticado | Listar histórico recente |
-| POST | `/api/movimentacoes` | Admin/estoquista | Registrar entrada ou saída |
-
-## Modelo de dados
-
-- `usuarios`: dados de acesso e perfil.
-- `materiais`: informações e saldo atual dos materiais; pode apontar para o usuário que cadastrou.
-- `movimentacoes`: registra tipo, quantidade, material, usuário e data; possui chaves estrangeiras para `materiais` e `usuarios`.
-
-## Regras de negócio
-
-- Quantidades de materiais e estoque mínimo não podem ser negativos.
-- A quantidade de uma movimentação precisa ser maior que zero.
-- Não é permitida saída maior que o saldo disponível.
-- O saldo e o registro de movimentação são atualizados na mesma transação.
-- O sistema sinaliza estoque baixo quando quantidade disponível é menor ou igual ao estoque mínimo.
-- A API verifica permissões; ocultar botões no navegador não é considerado controle de acesso suficiente.
-- Materiais com movimentações não podem ser excluídos, para preservar o histórico.
-
-## Testes manuais
-
-1. Abra `/api/saude` e confira se o banco está conectado.
-2. Cadastre uma conta, promova-a a `admin` pelo SQL e entre novamente.
-3. Cadastre um material com quantidade inicial de 10 e estoque mínimo de 3.
-4. Registre uma saída de 4 e confira se o saldo fica 6.
-5. Tente registrar uma saída de 7: a API deve recusar por estoque insuficiente.
-6. Cadastre outro usuário e confirme que o perfil consulta não consegue cadastrar, editar ou movimentar estoque.
-7. Confira o histórico e o aviso de estoque baixo.
-
-## GitHub e entregas
-
-Use o mesmo repositório nas quatro etapas. Faça commits pequenos e coerentes, por exemplo:
-
-- `Entrega 1: documenta problema e estrutura inicial`
-- `Entrega 2: implementa banco e autenticação JWT`
-- `Entrega 3: implementa CRUD e integração da API`
-- `Entrega 4: finaliza regras, testes e documentação`
-
-Antes de publicar, confira se `.env`, senhas, tokens e `node_modules` não foram adicionados. Este repositório contém a implementação-base das quatro etapas; execute os testes no seu computador e esteja preparada para explicar o código na apresentação.
+O GitHub será utilizado para armazenar e organizar os arquivos do projeto, registrar as alterações realizadas por meio de commits e acompanhar a evolução do desenvolvimento.

@@ -115,4 +115,4 @@ O projeto será desenvolvido em etapas, utilizando o mesmo repositório no GitHu
 
 ## 9. GitHub
 
-O GitHub será utilizado para armazenar e organizar os arquivos do projeto, registrar as alterações realizadas por meio de commits e acompanhar a evolução do desenvolvimento.
+O GitHub será utilizado para armazenar e organizar os arquivos do projeto, registrar as alterações realizadas por meio de commits e acompanhar a evolução do desenvolvimento .

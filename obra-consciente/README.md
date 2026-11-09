@@ -132,3 +132,13 @@ Use o mesmo repositório nas quatro etapas. Faça commits pequenos e coerentes, 
 - `Entrega 4: finaliza regras, testes e documentação`
 
 Antes de publicar, confira se `.env`, senhas, tokens e `node_modules` não foram adicionados. Este repositório contém a implementação-base das quatro etapas; execute os testes no seu computador e esteja preparada para explicar o código na apresentação.
+
+## Entrega 3 — CRUD, integração e validações
+
+O gerenciamento de materiais possui operações de cadastro, consulta, edição e exclusão. O front-end utiliza JavaScript, DOM e Fetch para acessar a API REST, que consulta e altera os dados no MySQL. As rotas protegidas verificam o token JWT e o perfil do usuário.
+
+As regras de negócio incluem quantidades não negativas, movimentações com quantidade maior que zero, bloqueio de saídas acima do saldo disponível e registro da movimentação junto com a atualização do estoque em uma transação. Materiais com histórico de movimentações não podem ser excluídos.
+
+### Roteiro de testes da Entrega 3
+
+Depois de configurar o banco e iniciar a API, testar manualmente: cadastrar, consultar, editar e excluir um material sem histórico; tentar valores inválidos; registrar uma entrada e conferir o aumento do saldo; registrar uma saída e conferir a redução; tentar retirar mais do que existe; e verificar que o perfil `consulta` não consegue cadastrar, editar, excluir ou movimentar materiais. Registrar os resultados reais desses testes antes da entrega.

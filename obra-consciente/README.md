@@ -104,7 +104,61 @@ As principais tabelas previstas são:
 
 As tabelas serão relacionadas por meio de chaves primárias e estrangeiras.
 
-## Regras de negócio
+## 8. Instalação e Execução
+
+### Pré-requisitos
+- **Node.js** (v18 ou superior)
+- **MySQL Server** (v8.0 ou superior)
+
+### Passo 1: Configurar o Banco de Dados
+1. Acesse o seu cliente MySQL (Workbench, DBeaver ou terminal).
+2. Execute o script `sql/obra_consciente.sql` para criar o banco `obra_consciente`, as tabelas, índices e restrições.
+   *(Caso possua uma base da versão anterior, execute `sql/migrar_schema_atual.sql`).*
+
+### Passo 2: Configurar e Iniciar o Back-end
+1. Acesse a pasta do back-end e instale as dependências:
+   ```bash
+   cd backend
+   npm install
+   ```
+2. Crie o arquivo `.env` a partir do modelo `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Preencha as variáveis no arquivo `backend/.env`:
+   ```env
+   PORT=3000
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=sua_senha_mysql
+   DB_NAME=obra_consciente
+   JWT_SECRET=sua_chave_secreta_segura
+   ```
+4. Inicie o servidor:
+   ```bash
+   npm start
+   ```
+   *(Para desenvolvimento com reinicialização automática, utilize `npm run dev`).*
+
+### Passo 3: Executar o Front-end
+1. Abra o arquivo `frontend/index.html` diretamente no navegador ou utilize uma extensão como o **Live Server** (VS Code).
+2. Certifique-se de que a API esteja acessível em `http://localhost:3000`.
+
+### Passo 4: Promover Perfis de Usuário (Opcional)
+- **Para promover um usuário a `estoquista` via script CLI:**
+  ```bash
+  cd backend
+  npm run promover-estoquista -- email@exemplo.com
+  ```
+- **Para promover um usuário a `admin` via SQL:**
+  ```sql
+  USE obra_consciente;
+  UPDATE usuarios SET perfil = 'admin' WHERE email = 'email@exemplo.com';
+  ```
+  *(Após alterar o perfil, faça logout e login novamente para gerar um novo token JWT).*
+
+## 9. Regras de negócio
 
 - Quantidades de materiais e estoque mínimo não podem ser negativos.
 - A quantidade de uma movimentação precisa ser maior que zero.
@@ -114,7 +168,7 @@ As tabelas serão relacionadas por meio de chaves primárias e estrangeiras.
 - A API verifica permissões; ocultar botões no navegador não é considerado controle de acesso suficiente.
 - Materiais com movimentações não podem ser excluídos, para preservar o histórico.
 
-## Testes manuais
+## 10. Testes manuais
 
 1. Abra `/api/saude` e confira se o banco está conectado.
 2. Cadastre uma conta, promova-a a `admin` pelo SQL e entre novamente.
@@ -124,7 +178,7 @@ As tabelas serão relacionadas por meio de chaves primárias e estrangeiras.
 6. Cadastre outro usuário e confirme que o perfil consulta não consegue cadastrar, editar ou movimentar estoque.
 7. Confira o histórico e o aviso de estoque baixo.
 
-## GitHub e entregas
+## 11. GitHub e entregas
 
 Use o mesmo repositório nas quatro etapas. Faça commits pequenos e coerentes, por exemplo:
 
@@ -134,3 +188,4 @@ Use o mesmo repositório nas quatro etapas. Faça commits pequenos e coerentes, 
 - `Entrega 4: finaliza regras, testes e documentação`
 
 Antes de publicar, confira se `.env`, senhas, tokens e `node_modules` não foram adicionados. Este repositório contém a implementação-base das quatro etapas; execute os testes no seu computador e esteja preparada para explicar o código na apresentação.
+
